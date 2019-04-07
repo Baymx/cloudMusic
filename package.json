@@ -1,7 +1,7 @@
 {
-  "name": "pingchang-mini-program",
+  "name": "cloudMusic",
   "version": "1.0.0",
-  "description": "平常小程序",
+  "description": "音乐",
   "author": "qianweiwei <qianweiwei@pingchang666.com>",
   "private": true,
   "scripts": {

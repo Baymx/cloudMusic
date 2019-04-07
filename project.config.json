@@ -9,8 +9,8 @@
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
-	"appid": "wxcbba81be348a2d49",
-	"projectname": "pingchang-mini-program",
+	"appid": "wxc71abefa69bce58f",
+	"projectname": "cloudMusic",
 	"condition": {
 		"search": {
 			"current": -1,
