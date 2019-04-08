@@ -33,12 +33,12 @@ const appid = config.appid;
 
 // 通用的get请求
 export const get = (url,data) => {
-    return fly.get(url, qs.stringify(data))
+    return fly.get(host+url, qs.stringify(data))
 };
 
 // 通用的post请求
 export const post = (url,data) => {
-    return fly.post(url, qs.stringify(data))
+    return fly.post(host+url, qs.stringify(data))
 };
 // 封装的登录请求，根据后台接收方式选择是否加qs.stringify
 export const login = params => {

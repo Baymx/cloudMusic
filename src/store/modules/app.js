@@ -12,7 +12,14 @@ import {
   APP_GET_STOTAGE,
   APP_SET_STOTAGE
 } from "../mutation-types";
-import { apiTest } from "../../api/app";
+import {
+  apiTest,
+  apiGetMvFirst,
+  apiGetBanner,
+  apiGetPersonalized,
+  apiGetNewsong,
+  apiGetDJprogram
+} from "../../api/app";
 const state = {
   appMsg: "",
   token: ""
@@ -27,15 +34,74 @@ const actions = {
    * @param params
    * @returns {Promise<*>}
    */
-  apiGetDemo({ commit }, params) {
+  apiGetDemo({
+    commit
+  }, params) {
     return apiTest(params ? params : {});
+  },
+  /**
+   * getMvFirst 获取最新mv
+   * @param commit
+   * @param params
+   * @returns {Promise<*>}
+   */
+  getMvFirst({
+    commit
+  }, params) {
+    return apiGetMvFirst(params ? params : {});
+  },
+  /**
+   * getBanner 获取banner轮播
+   * @param commit
+   * @param params
+   * @returns {Promise<*>}
+   */
+  getBanner({
+    commit
+  }, params) {
+    return apiGetBanner(params ? params : {});
+  },
+  /**
+   * getPersonalized 获取推荐歌单
+   * @param commit
+   * @param params
+   * @returns {Promise<*>}
+   */
+  getPersonalized({
+    commit
+  }, params) {
+    return apiGetPersonalized(params ? params : {});
+  },
+  /**
+   * getNewsong 获取新歌
+   * @param commit
+   * @param params
+   * @returns {Promise<*>}
+   */
+  getNewsong({
+    commit
+  }, params) {
+    return apiGetNewsong(params ? params : {});
+  },
+  /**
+   * getDJprogram 获取电台
+   * @param commit
+   * @param params
+   * @returns {Promise<*>}
+   */
+  getDJprogram({
+    commit
+  }, params) {
+    return apiGetDJprogram(params ? params : {});
   },
   /**
    * showLoading
    * @param commit
    * @param params
    */
-  showLoading({ commit }, params) {
+  showLoading({
+    commit
+  }, params) {
     commit(APP_LOADING, params);
   },
   /**
@@ -43,7 +109,9 @@ const actions = {
    * @param commit
    * @param params
    */
-  showToast({ commit }, params) {
+  showToast({
+    commit
+  }, params) {
     commit(APP_TOAST, params);
   },
   /**
@@ -51,7 +119,9 @@ const actions = {
    * @param commit
    * @param params
    */
-  getStorage({ commit }, params) {
+  getStorage({
+    commit
+  }, params) {
     commit(APP_GET_STOTAGE, params);
   },
   /**
@@ -59,7 +129,9 @@ const actions = {
    * @param commit
    * @param params
    */
-  setStorage({ commit }, params) {
+  setStorage({
+    commit
+  }, params) {
     commit(APP_SET_STOTAGE, params);
   }
 };
@@ -89,12 +161,11 @@ const mutations = {
    */
   [APP_TOAST](state, data) {
     wx.showToast({
-      title:
-        typeof data == "object" && data.title
-          ? data.title
-          : data
-            ? data
-            : "未知消息",
+      title: typeof data == "object" && data.title ?
+        data.title :
+        data ?
+        data :
+        "未知消息",
       icon: typeof data == "object" && data.icon ? data.icon : "none",
       mask: true,
       duration: 2500
@@ -127,7 +198,7 @@ const mutations = {
     return await new Promise((resolve, reject) => {
       wx.setStorage({
         key: data.key,
-        data : data.value,
+        data: data.value,
         success: res => {
           resolve(res);
         },
