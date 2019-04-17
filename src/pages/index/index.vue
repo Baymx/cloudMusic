@@ -64,6 +64,9 @@
 import { mapActions } from "vuex";
 import { setStorage, getStorage } from "@/utils/index";
 import store from "@/store/index";
+import { resolve } from "url";
+import { rejects } from "assert";
+import { error } from "util";
 export default {
     data() {
         return {
@@ -84,7 +87,7 @@ export default {
             "getBanner",
             "getPersonalized",
             "getNewsong",
-            "getDJprogram",
+            "getDJprogram"
         ]),
         getUserInfo1() {
             this.apiGetDemo().then(res => {
@@ -174,64 +177,104 @@ export default {
                     // showLoginModal();
                 }
             });
+        },
+        /**
+         * getBannerData 获取banner数据 ----轮播图数据
+         * @returns { Promise }
+         */
+        getBannerData() {
+            return new Promise((resolve, reject) => {
+                this.getBanner().then(res => {
+                    if (res && res.code == 200) {
+                        resolve(res.banners);
+                    } else {
+                        reject(res.msg ? res.msg : "error");
+                    }
+                });
+            });
+        },
+        /**
+         * getNewsongData 获取推荐新歌数据
+         * @returns { Promise }
+         */
+        getNewsongData() {
+            return new Promise((resolve, reject) => {
+                this.getNewsong({ limit: 6 }).then(res => {
+                    if (res && res.code == 200) {
+                        resolve(res.result.slice(0, 6));
+                    } else {
+                        reject(res.msg ? res.msg : "error");
+                    }
+                });
+            });
+        },
+        /**
+         * getPersonalizedData 获取推荐歌单数据
+         * @returns { Promise }
+         */
+        getPersonalizedData() {
+            return new Promise((resolve, reject) => {
+                this.getPersonalized({ limit: 6 }).then(res => {
+                    if (res && res.code == 200) {
+                        resolve(res.result);
+                    } else {
+                        reject(res.msg ? res.msg : "error");
+                    }
+                });
+            });
+        },
+        /**
+         * getDJprogramData 获取推荐节目数据
+         * @returns { Promise }
+         */
+        getDJprogramData() {
+            return new Promise((resolve, reject) => {
+                this.getDJprogram({ limit: 6 }).then(res => {
+                    if (res && res.code == 200) {
+                        resolve(res.result.slice(0, 6));
+                    } else {
+                        reject(res.msg ? res.msg : "error");
+                    }
+                });
+            });
+        },
+        /**
+         * getIndexData 获取主页数据
+         */
+        getIndexData() {
+            Promise.all([
+                this.getBannerData(),
+                this.getNewsongData(),
+                this.getPersonalizedData(),
+                this.getDJprogramData()
+            ])
+                .then(
+                    ([
+                        banner,
+                        newSong,
+                        recommendResource,
+                        personalizedDJprogram
+                    ]) => {
+                        console.log(banner);
+                        this.banner = banner;
+                        this.personalizedNewsong = newSong;
+                        this.recommendResource = recommendResource;
+                        this.personalizedDJprogram = personalizedDJprogram;
+                    }
+                )
+                .catch(error => {
+                    this.showToast(error ? error : "error");
+                });
         }
     },
-
     created() {
         // 调用应用实例的方法获取全局数据
         // this.getUserInfo();
         // this.login();
     },
     mounted() {
-        // this.getUserInfo()
         this.search();
-        this.getMvFirst().then(res => {
-            console.log(res);
-        });
-        this.getBanner().then(res => {
-            console.log(res);
-            if (res && res.code == 200) {
-                console.log(111);
-                this.banner = res.banners;
-                console.log(this.banner);
-            } else {
-                console.log(123);
-                this.showToast(res.msg ? res.msg : "error");
-            }
-        });
-        this.getPersonalized({ limit: 6 }).then(res => {
-            console.log(res);
-            if (res && res.code == 200) {
-                console.log(111);
-                this.recommendResource = res.result;
-                console.log(this.recommendResource);
-            } else {
-                console.log(123);
-                this.showToast(res.msg ? res.msg : "error");
-            }
-        });
-        this.getNewsong({ limit: 6 }).then(res => {
-            console.log(res);
-            if (res && res.code == 200) {
-                console.log(111);
-                this.personalizedNewsong = res.result.slice(0, 6);
-                console.log(this.personalizedNewsong);
-            } else {
-                console.log(123);
-                this.showToast(res.msg ? res.msg : "error");
-            }
-        });
-        this.getDJprogram({ limit: 6 }).then(res => {
-            console.log(res);
-            if (res && res.code == 200) {
-                console.log(111);
-                this.personalizedDJprogram = res.result.slice(0, 6);
-                console.log(this.personalizedDJprogram);
-            } else {
-                console.log(123);
-                this.showToast(res.msg ? res.msg : "error");
-            }
-        });
+        this.getIndexData();
     }
 };
 </script>
