@@ -57,6 +57,13 @@
                 </div>
             </div>
         </div>
+
+        <i-tab-bar >
+            <i-tab-bar-item key="homepage" icon="homepage" current-icon="homepage_fill" title="Home"></i-tab-bar-item>
+            <i-tab-bar-item key="group" icon="group" current-icon="group_fill" title="Friends"></i-tab-bar-item>
+            <i-tab-bar-item key="remind" icon="remind" current-icon="remind_fill" count="3" title="Notice"></i-tab-bar-item>
+            <i-tab-bar-item key="mine" icon="mine" current-icon="mine_fill" dot title="My"></i-tab-bar-item>
+        </i-tab-bar>
     </div>
 </template>
 
@@ -267,11 +274,9 @@ export default {
                 });
         },
         /**
-         * toNewSong 
+         * toNewSong
          */
-        toNewSong(){
-
-        }
+        toNewSong() {}
     },
     created() {
         // 调用应用实例的方法获取全局数据
