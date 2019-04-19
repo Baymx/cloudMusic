@@ -265,6 +265,12 @@ export default {
                 .catch(error => {
                     this.showToast(error ? error : "error");
                 });
+        },
+        /**
+         * toNewSong 
+         */
+        toNewSong(){
+
         }
     },
     created() {
