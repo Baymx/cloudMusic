@@ -44,38 +44,23 @@ export default {
     data() {
         return {
             userInfo: {},
-            musicDetailsName: [
-                {
-                    id: 11127,
-                    name: "Beyond",
-                    tns: [],
-                    alias: []
-                }
-            ],
-            musicDetailsImg:
-                "https://p1.music.126.net/QHw-RuMwfQkmgtiyRpGs0Q==/102254581395219.jpg",
+            musicDetailsName: [],
+            musicDetailsImg: "",
             rotate: false,
             animation: "",
             percent: 10,
             status: true,
             musicUrlData: "",
-            musicDetailsName :""
+            musicDetailsName: "",
+            backgroundAudioManager : ""
         };
-    },
-    methods: {
-        ...mapActions([
-            "showLoading",
-            "showToast",
-            "getSongUrl",
-            "getSongDetail"
-        ])
     },
     computed: {
         ...mapGetters({ client: "getterClient" })
     },
     onLoad: function(options) {
         this.status = true;
-        console.log(1111)
+        console.log(1111);
         wx.setStorageSync("status", true);
         this.rotate = true;
         // this.zanting.zhuangtai = true;
@@ -105,7 +90,7 @@ export default {
         }
         wx.setStorageSync("playing", playing);
 
-        const backgroundAudioManager = wx.getBackgroundAudioManager();
+        this.backgroundAudioManager = wx.getBackgroundAudioManager();
         let musicId = wx.getStorageSync("musicId");
 
         var postsCollected = wx.getStorageSync("posts_collected");
@@ -122,29 +107,35 @@ export default {
                 postcollected: _postcollected
             });
         }
-         console.log(1111)
-        this.getSongUrl({ id: 33894312 }).then(res => {
-            console.log(res);
-            this.musicUrlData = res.data[0].url;
-            console.log(this.musicUrlData)
-            backgroundAudioManager.src = this.musicUrlData;
-        }).catch(e=>{
-            console.log(e)
-        });
-        console.log(22)
+        console.log(1111);
 
-        this.getSongDetail({ ids: 33894312 }).then(res => {
-            console.log(res)
-            // this.musicDetailsData = d.data;
-            // this.musicDetailsImg = d.data.songs[0].al.picUrl;
-            // let musicDetailsTitle = d.data.songs[0].al.name;
-            // this.musicDetailsName = d.data.songs[0].ar;
-            // backgroundAudioManager.title = musicDetailsTitle;
-            // backgroundAudioManager.singer = this.musicDetailsName;
-            // backgroundAudioManager.coverImgUrl = this.musicDetailsImg;
-        }).catch(e=>{
-            console.log(e)
-        });
+        // this.getSongDetail({ ids: 33894312 })
+        //     .then(res => {
+        //         console.log(res);
+        //         this.musicDetailsData = res;
+        //         this.musicDetailsImg = res.songs[0].al.picUrl;
+        //         let musicDetailsTitle = res.songs[0].al.name;
+        //         this.musicDetailsName = res.songs[0].ar;
+        //         backgroundAudioManager.title = musicDetailsTitle;
+        //         backgroundAudioManager.singer = this.musicDetailsName;
+        //         backgroundAudioManager.coverImgUrl = this.musicDetailsImg;
+        //     })
+        //     .catch(e => {
+        //         console.log(e);
+        //     });
+        // this.getSongUrl({ id: 33894312 })
+        //     .then(res => {
+        //         console.log(res);
+        //         this.musicUrlData = res.data[0].url;
+        //         console.log(this.musicUrlData);
+        //         backgroundAudioManager.src = this.musicUrlData;
+        //         // BackgroundAudioManager.play()
+        //     })
+        //     .catch(e => {
+        //         console.log(e);
+        //     });
+        console.log(22);
+        this.getPageDetail(33894312);
     },
     created() {},
     mounted() {
@@ -154,6 +145,8 @@ export default {
         wx.onBackgroundAudioPlay(function() {
             // callback
             console.log("onBackgroundAudioPlay");
+            console.log(this.backgroundAudioManager.duration);
+
         });
         /**
          * 监听音乐暂停
@@ -162,6 +155,74 @@ export default {
             // callback
             console.log("onBackgroundAudioPause");
         });
+        // this.getPageDetail(33894312);
+    },
+    methods: {
+        ...mapActions([
+            "showLoading",
+            "showToast",
+            "getSongUrl",
+            "getSongDetail"
+        ]),
+        /**
+         * getPageDetail 获取歌曲
+         * @param id  歌曲的id
+         * @returns {Promise<*>}
+         */
+        getPageDetail(id) {
+            Promise.all([this.getPageSongDetail(id), this.getPageSongUrl(id)])
+                .then(([detail, urlData]) => {
+                    //歌曲详情
+                    this.musicDetailsData = detail;
+                    this.musicDetailsImg = detail.songs[0].al.picUrl;
+                    let musicDetailsTitle = detail.songs[0].al.name;
+                    this.musicDetailsName = detail.songs[0].ar;
+                    
+                    this.backgroundAudioManager.title = musicDetailsTitle;
+                    this.backgroundAudioManager.singer = this.musicDetailsName;
+                    this.backgroundAudioManager.coverImgUrl = this.musicDetailsImg;
+                    //歌曲url信息
+                    this.musicUrlData = urlData.data[0].url;
+                    this.backgroundAudioManager.src = this.musicUrlData;
+                })
+                .catch(error => {
+                    console.log
+                    this.showToast(error ? error : "error");
+                });
+        },
+        /**
+         * getSongDetail 获取歌曲详情
+         * @param id  歌曲的id
+         * @returns {Promise<*>}
+         */
+        getPageSongDetail(id) {
+            return new Promise((resolve, reject) => {
+                console.log("Promise");
+                this.getSongDetail({ ids: id }).then(res => {
+                    if (res && res.code == 200) {
+                        resolve(res);
+                    } else {
+                        reject(res.msg ? res.msg : "error");
+                    }
+                });
+            });
+        },
+        /**
+         * getPageSongUrl 获取歌曲的音频url
+         * @param id  歌曲的id
+         * @returns {Promise<*>}
+         */
+        getPageSongUrl(id) {
+            return new Promise((resolve, reject) => {
+                this.getSongUrl({ id: id }).then(res => {
+                    if (res && res.code == 200) {
+                        resolve(res);
+                    } else {
+                        reject(res.msg ? res.msg : "error");
+                    }
+                });
+            });
+        }
     }
 };
 </script>
