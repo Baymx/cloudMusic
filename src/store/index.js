@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as actions from './action';
 import app from './modules/app';
+import play from './modules/play';
 // import state from './state';
 // import mutations from './mutations';
  
@@ -11,5 +12,6 @@ export default new Vuex.Store({
   actions,
 	modules: {
     app,
+    play
 },
 })

@@ -46,7 +46,7 @@
                 </div>
             </div>
         </div>
-        <div class="personalized">
+        <div class="personalized" style=" margin-bottom: 35px;">
             <span class="perSpan">推荐节目></span>
             <div class="gdView">
                 <div class="gdInnerView" v-for="item in personalizedDJprogram" :key="item.id">
@@ -57,12 +57,10 @@
                 </div>
             </div>
         </div>
-
-        <i-tab-bar >
-            <i-tab-bar-item key="homepage" icon="homepage" current-icon="homepage_fill" title="Home"></i-tab-bar-item>
+        <i-tab-bar color="red" fixed current="homepage">
+            <i-tab-bar-item key="homepage" icon="homepage" current-icon="homepage_fill"  title="Home"></i-tab-bar-item>
             <i-tab-bar-item key="group" icon="group" current-icon="group_fill" title="Friends"></i-tab-bar-item>
-            <i-tab-bar-item key="remind" icon="remind" current-icon="remind_fill" count="3" title="Notice"></i-tab-bar-item>
-            <i-tab-bar-item key="mine" icon="mine" current-icon="mine_fill" dot title="My"></i-tab-bar-item>
+            <i-tab-bar-item key="mine" icon="mine" current-icon="mine_fill" title="My"></i-tab-bar-item>
         </i-tab-bar>
     </div>
 </template>
@@ -71,13 +69,9 @@
 import { mapActions } from "vuex";
 import { setStorage, getStorage } from "@/utils/index";
 import store from "@/store/index";
-import { resolve } from "url";
-import { rejects } from "assert";
-import { error } from "util";
 export default {
     data() {
         return {
-            motto: "Hello World",
             userInfo: {},
             banner: [],
             recommendResource: [],

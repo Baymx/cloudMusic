@@ -6,7 +6,7 @@
 var Fly = require("flyio/dist/npm/wx")
 var fly = new Fly;
 import config from '@/config'
-import store from "../store/index"
+import store from "../store"
 //配置请求基地址
 // //定义公共headers
 // fly.config.headers={xx:5,bb:6,dd:7}

@@ -20,12 +20,21 @@ import {
   apiGetNewsong,
   apiGetDJprogram
 } from "../../api/app";
-const state = {
-  appMsg: "",
-  token: ""
+
+const client = {
+  width: wx.getSystemInfoSync().windowWidth,
+  height: wx.getSystemInfoSync().windowHeight
 };
 
-const getters = {};
+const state = {
+  appMsg: "",
+  token: "",
+  client: client
+};
+
+const getters = {
+  getterClient: state => client
+};
 
 const actions = {
   /**
@@ -162,10 +171,8 @@ const mutations = {
   [APP_TOAST](state, data) {
     wx.showToast({
       title: typeof data == "object" && data.title ?
-        data.title :
-        data ?
-        data :
-        "未知消息",
+        data.title : data ?
+        data : "未知消息",
       icon: typeof data == "object" && data.icon ? data.icon : "none",
       mask: true,
       duration: 2500
