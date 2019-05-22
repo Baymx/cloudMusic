@@ -27,7 +27,7 @@
             <!-- 上一曲 -->
             <i class="icon">&#xe637;</i>
             <!-- 播放/暂停 -->
-            <i class="icon paly-btn">&#xe607;</i>
+            <i class="icon paly-btn" @click="palyOrPause"> {{ isPaly ? '&#xe6bd;' : '&#xe607;' }}</i>
             <!-- 下一曲 -->
             <i class="icon">&#xe647;</i>
             <!-- 播放列表 -->
@@ -52,7 +52,8 @@ export default {
             status: true,
             musicUrlData: "",
             musicDetailsName: "",
-            backgroundAudioManager : ""
+            backgroundAudioManager: "",
+            isPaly: false
         };
     },
     computed: {
@@ -60,9 +61,8 @@ export default {
     },
     onLoad: function(options) {
         this.status = true;
-        console.log(1111);
         wx.setStorageSync("status", true);
-        this.rotate = true;
+        // this.rotate = true;
         // this.zanting.zhuangtai = true;
         this.id = options.id;
         let playing = wx.getStorageSync("playing");
@@ -107,34 +107,6 @@ export default {
                 postcollected: _postcollected
             });
         }
-        console.log(1111);
-
-        // this.getSongDetail({ ids: 33894312 })
-        //     .then(res => {
-        //         console.log(res);
-        //         this.musicDetailsData = res;
-        //         this.musicDetailsImg = res.songs[0].al.picUrl;
-        //         let musicDetailsTitle = res.songs[0].al.name;
-        //         this.musicDetailsName = res.songs[0].ar;
-        //         backgroundAudioManager.title = musicDetailsTitle;
-        //         backgroundAudioManager.singer = this.musicDetailsName;
-        //         backgroundAudioManager.coverImgUrl = this.musicDetailsImg;
-        //     })
-        //     .catch(e => {
-        //         console.log(e);
-        //     });
-        // this.getSongUrl({ id: 33894312 })
-        //     .then(res => {
-        //         console.log(res);
-        //         this.musicUrlData = res.data[0].url;
-        //         console.log(this.musicUrlData);
-        //         backgroundAudioManager.src = this.musicUrlData;
-        //         // BackgroundAudioManager.play()
-        //     })
-        //     .catch(e => {
-        //         console.log(e);
-        //     });
-        console.log(22);
         this.getPageDetail(33894312);
     },
     created() {},
@@ -145,8 +117,7 @@ export default {
         wx.onBackgroundAudioPlay(function() {
             // callback
             console.log("onBackgroundAudioPlay");
-            console.log(this.backgroundAudioManager.duration);
-
+            // console.log(this.backgroundAudioManager.duration);
         });
         /**
          * 监听音乐暂停
@@ -177,16 +148,22 @@ export default {
                     this.musicDetailsImg = detail.songs[0].al.picUrl;
                     let musicDetailsTitle = detail.songs[0].al.name;
                     this.musicDetailsName = detail.songs[0].ar;
-                    
+
                     this.backgroundAudioManager.title = musicDetailsTitle;
                     this.backgroundAudioManager.singer = this.musicDetailsName;
                     this.backgroundAudioManager.coverImgUrl = this.musicDetailsImg;
+                    wx.setNavigationBarTitle({
+                        title: musicDetailsTitle //页面标题为路由参数
+                    });
                     //歌曲url信息
                     this.musicUrlData = urlData.data[0].url;
                     this.backgroundAudioManager.src = this.musicUrlData;
+
+                    this.isPaly = true;
+                    this.rotate = true;
                 })
                 .catch(error => {
-                    console.log
+                    console.log;
                     this.showToast(error ? error : "error");
                 });
         },
@@ -222,6 +199,24 @@ export default {
                     }
                 });
             });
+        },
+        /**
+         * getPageSongUrl 获取歌曲的音频url
+         * @param id  歌曲的id
+         * @returns {Promise<*>}
+         */
+        palyOrPause() {
+            if (this.isPaly) {
+                console.log("暂停");
+                this.backgroundAudioManager.pause();
+                this.isPaly = false;
+                this.rotate = false;
+            } else {
+                console.log("播放");
+                this.backgroundAudioManager.play();
+                this.isPaly = true;
+                this.rotate = true;
+            }
         }
     }
 };
