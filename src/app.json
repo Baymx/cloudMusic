@@ -1,8 +1,7 @@
 {
   "pages": [
-
-    "pages/play/main",
     "pages/index/main",
+    "pages/play/main",
     "pages/authorization/main",
     "pages/login/main",
     "pages/logs/main",

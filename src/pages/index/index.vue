@@ -30,7 +30,7 @@
                     <div class="playCountMain">
                         <div class="playCount">
                             <i-icon type="customerservice" />
-                            <span>{{item.playCount}}</span>
+                            <span>{{ (item.playCount / 10000) + 'w' }}</span>
                         </div>
                         <img class="innerImg" :src="item.picUrl" /></div>
                     <span class="innerText">{{item.name}}</span>
@@ -79,6 +79,11 @@ export default {
             personalizedDJprogram: []
         };
     },
+    // computed:{
+    //     parseInt: function(num){
+    //         return parseInt(num/10000) + 'w';
+    //     }
+    // },
     methods: {
         ...mapActions([
             "showLoading",
@@ -90,29 +95,16 @@ export default {
             "getNewsong",
             "getDJprogram"
         ]),
+        parseInt1: function(num){
+            console.log(num)
+            console.log(parseInt(num/10000) + 'w')
+
+            return parseInt(num/10000) + 'w';
+        },
         getUserInfo1() {
             this.apiGetDemo().then(res => {
                 console.log(res);
             });
-
-            // wx.login({
-            //     success: res => {
-            //         if (res.code) {
-            //             // 发起网络请求
-            //             wx.request({
-            //                 url: "https://api.weixin.qq.com/sns/jscode2session",
-            //                 data: {
-            //                     js_code: res.code,
-            //                     appid: "wxc71abefa69bce58f",
-            //                     grant_type: "authorization_code",
-            //                     secret: "a93af2895f71bfdc415b49f7f34f5248"
-            //                 }
-            //             });
-            //         } else {
-            //             console.log("登录失败！" + res.errMsg);
-            //         }
-            //     }
-            // });
         },
         search() {
             wx.checkSession({
@@ -273,9 +265,6 @@ export default {
         toNewSong() {}
     },
     created() {
-        // 调用应用实例的方法获取全局数据
-        // this.getUserInfo();
-        // this.login();
     },
     mounted() {
         this.search();
