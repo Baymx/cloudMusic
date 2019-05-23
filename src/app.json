@@ -1,7 +1,9 @@
 {
   "pages": [
+
     "pages/index/main",
     "pages/play/main",
+    "pages/playlist/main",
     "pages/authorization/main",
     "pages/login/main",
     "pages/logs/main",

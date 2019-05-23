@@ -262,7 +262,16 @@ export default {
         /**
          * toNewSong
          */
-        toNewSong() {}
+        toNewSong() {},
+        /**
+         * clickSongList
+         */
+        toPlayListDetail(id) {
+            console.log(id)
+            const url = "../playlist/main?id=" + id;
+            wx.navigateTo({ url });
+        }
+
     },
     created() {
     },

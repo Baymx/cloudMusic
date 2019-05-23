@@ -11,10 +11,10 @@ switch (process.env.NODE_ENV) {
   case 'pre': //预发部环境
         break;
   case 'development': //开发环境
-  host = 'http://localhost:3000'
+  host = 'http://localhost:4000'
         break;
   default : //默认本地环境
-        host = 'http://localhost:3000'
+        host = 'http://localhost:4000'
         break;
 }
 
