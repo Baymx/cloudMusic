@@ -26,7 +26,7 @@
             <span>{{ item.name}}</span>
             <span>{{item.ar[0].name}}</span>
           </div>
-          <div class="play">
+          <div class="play" @click="playMusic(item.id)">
             <span>&#xe60e;</span>
           </div>
         </li>
@@ -76,6 +76,10 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
+        },
+        playMusic(id) {
+            const url = "../play/main?id=" + id;
+            wx.navigateTo({ url });
         }
     }
 };

@@ -53,7 +53,8 @@ export default {
             musicUrlData: "",
             musicDetailsName: "",
             backgroundAudioManager: "",
-            isPaly: false
+            isPaly: false,
+            id : ""
         };
     },
     computed: {
@@ -107,7 +108,7 @@ export default {
                 postcollected: _postcollected
             });
         }
-        this.getPageDetail(33894312);
+        this.getPageDetail(this.id);
     },
     created() {},
     mounted() {
